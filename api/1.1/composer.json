@@ -1,0 +1,25 @@
+{
+    "name": "vlucas/bulletphp",
+    "type": "library",
+    "description": "A heierarchical resource-oriented micro-framework built on nested closures instead of route-based callbacks",
+    "keywords": ["framework", "microphp", "micro", "microframework", "router", "routing"],
+    "homepage": "http://bulletphp.com",
+    "license" : "BSD",
+    "authors" : [
+        {
+            "name": "Vance Lucas",
+            "email": "vance@vancelucas.com",
+            "homepage": "http://www.vancelucas.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "pimple/pimple": "3.*",
+        "vlucas/bulletphp": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Bullet": "src/"
+        }
+    }
+}
