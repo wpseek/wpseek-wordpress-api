@@ -24,7 +24,7 @@ $app->path('wordpress', function($request) use($app) {
 				$http_code = ($i->is_error ? 404 : 200);
 				
 				$app->format('json', function() use($apidata, $app, $http_code) {
-					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json');
+					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 				});
 				
 				$app->format('xml', function($request) use($apidata, $app, $http_code) {					
@@ -44,7 +44,7 @@ $app->path('wordpress', function($request) use($app) {
 				$http_code = ($i->is_error ? 404 : 200);
 				
 				$app->format('json', function() use($apidata, $app, $http_code) {
-					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json');
+					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 				});
 				
 				$app->format('xml', function($request) use($apidata, $app, $http_code) {				
@@ -56,13 +56,14 @@ $app->path('wordpress', function($request) use($app) {
 		
 		$app->path('related', function($request) use($app) {
 			$app->param('slug', function($request, $func) use($app) {
+				$format = $request->format();
 				$i = new apiHelper();
-				$apidata = $i->getRelatedFunctions($func, $request);
+				$apidata = $i->getRelatedFunctions($func, $request, $format);
 				
 				$http_code = ($i->is_error ? 404 : 200);
 				
 				$app->format('json', function() use($apidata, $app, $http_code) {
-					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json');
+					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 				});
 				
 				$app->format('xml', function($request) use($apidata, $app, $http_code) {				
@@ -75,13 +76,14 @@ $app->path('wordpress', function($request) use($app) {
 	
 	$app->path('functions', function($request) use($app) {
 		$app->get(function($request) use($app) {
+			$format = $request->format();
 			$i = new apiHelper();
-			$apidata = $i->getFunctions();
+			$apidata = $i->getFunctions($format);
 			
 			$http_code = ($i->is_error ? 404 : 200);
 			
 			$app->format('json', function() use($apidata, $app, $http_code) {
-				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json');
+				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 			});
 			
 			$app->format('xml', function($request) use($apidata, $app, $http_code) {				
@@ -97,13 +99,14 @@ $app->path('wordpress', function($request) use($app) {
 	
 	$app->path('topics', function($request) use($app) {
 		$app->param('slug', function($request, $func) use($app) {
+			$format = $request->format();
 			$i = new apiHelper();
-			$apidata = $i->getTopics($func, $request);
+			$apidata = $i->getTopics($func, $request, $format);
 			
 			$http_code = ($i->is_error ? 404 : 200);
 			
-			$app->format('json', function() use($apidata, $app, $http_code) {
-				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json');
+			$app->format('json', function($request) use($apidata, $app, $http_code) {
+				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 			});
 			
 			$app->format('xml', function($request) use($apidata, $app, $http_code) {				
