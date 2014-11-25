@@ -14,102 +14,148 @@ $apidata = array();
 $app = new Bullet\App();
 
 $app->path('wordpress', function($request) use($app) {
-	
+
 	$app->path('release', function($request) use($app) {
 		$app->path('latest', function($request) use($app) {
 			$app->get(function($request) use($app) {
 				$i = new apiHelper();
 				$apidata = $i->getLatestRelease();
-			
+
 				$http_code = ($i->is_error ? 404 : 200);
-				
+
 				$app->format('json', function() use($apidata, $app, $http_code) {
 					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 				});
-				
-				$app->format('xml', function($request) use($apidata, $app, $http_code) {					
+
+				$app->format('xml', function($request) use($apidata, $app, $http_code) {
 					$xml = Array2XML::createXML('response', $apidata);
 					return $app->response($http_code, $xml->saveXML())->header('Content-Type', 'application/xml');
 				});
 			});
 		});
 	});
-	
+
+
 	$app->path('function', function($request) use($app) {
 		$app->path('info', function($request) use($app) {
 			$app->param('slug', function($request, $func) use($app) {
 				$i = new apiHelper();
 				$apidata = $i->getFunction($func);
-				
+
 				$http_code = ($i->is_error ? 404 : 200);
-				
+
 				$app->format('json', function() use($apidata, $app, $http_code) {
 					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 				});
-				
-				$app->format('xml', function($request) use($apidata, $app, $http_code) {				
+
+				$app->format('xml', function($request) use($apidata, $app, $http_code) {
 					$xml = Array2XML::createXML('response', $apidata);
 					return $app->response($http_code, $xml->saveXML())->header('Content-Type', 'application/xml');
 				});
 			});
 		});
-		
+
 		$app->path('related', function($request) use($app) {
 			$app->param('slug', function($request, $func) use($app) {
 				$format = $request->format();
 				$i = new apiHelper();
 				$apidata = $i->getRelatedFunctions($func, $request, $format);
-				
+
 				$http_code = ($i->is_error ? 404 : 200);
-				
+
 				$app->format('json', function() use($apidata, $app, $http_code) {
 					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 				});
-				
-				$app->format('xml', function($request) use($apidata, $app, $http_code) {				
+
+				$app->format('xml', function($request) use($apidata, $app, $http_code) {
 					$xml = Array2XML::createXML('response', $apidata);
 					return $app->response($http_code, $xml->saveXML())->header('Content-Type', 'application/xml');
 				});
 			});
 		});
 	});
-	
+
 	$app->path('functions', function($request) use($app) {
 		$app->get(function($request) use($app) {
 			$format = $request->format();
 			$i = new apiHelper();
 			$apidata = $i->getFunctions($format);
-			
+
 			$http_code = ($i->is_error ? 404 : 200);
-			
+
 			$app->format('json', function() use($apidata, $app, $http_code) {
 				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 			});
-			
-			$app->format('xml', function($request) use($apidata, $app, $http_code) {				
+
+			$app->format('xml', function($request) use($apidata, $app, $http_code) {
 				$xml = Array2XML::createXML('response', $apidata);
 				return $app->response($http_code, $xml->saveXML())->header('Content-Type', 'application/xml');
 			});
-			
-			$app->format('plain', function($request) use($apidata, $app, $http_code) {				
+
+			$app->format('plain', function($request) use($apidata, $app, $http_code) {
 				return $app->response($http_code, implode("\n", $apidata['items']))->header('Content-Type', 'text/plain');
 			});
 		});
 	});
-	
+
+
+	$app->path('constant', function($request) use($app) {
+		$app->path('info', function($request) use($app) {
+			$app->param('slug', function($request, $func) use($app) {
+				$i = new apiHelper();
+				$apidata = $i->getConstant($func);
+
+				$http_code = ($i->is_error ? 404 : 200);
+
+				$app->format('json', function() use($apidata, $app, $http_code) {
+					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
+				});
+
+				$app->format('xml', function($request) use($apidata, $app, $http_code) {
+					$xml = Array2XML::createXML('response', $apidata);
+					return $app->response($http_code, $xml->saveXML())->header('Content-Type', 'application/xml');
+				});
+			});
+		});
+	});
+
+	$app->path('constants', function($request) use($app) {
+		$app->get(function($request) use($app) {
+			$format = $request->format();
+			$i = new apiHelper();
+			$apidata = $i->getConstants($format);
+
+			$http_code = ($i->is_error ? 404 : 200);
+
+			$app->format('json', function() use($apidata, $app, $http_code) {
+				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
+			});
+
+			$app->format('xml', function($request) use($apidata, $app, $http_code) {
+				$xml = Array2XML::createXML('response', $apidata);
+				return $app->response($http_code, $xml->saveXML())->header('Content-Type', 'application/xml');
+			});
+
+			$app->format('plain', function($request) use($apidata, $app, $http_code) {
+				return $app->response($http_code, implode("\n", $apidata['items']))->header('Content-Type', 'text/plain');
+			});
+		});
+	});
+
+
 	$app->path('topics', function($request) use($app) {
 		$app->param('slug', function($request, $func) use($app) {
 			$format = $request->format();
 			$i = new apiHelper();
 			$apidata = $i->getTopics($func, $request, $format);
-			
+
 			$http_code = ($i->is_error ? 404 : 200);
-			
+
 			$app->format('json', function($request) use($apidata, $app, $http_code) {
 				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 			});
-			
-			$app->format('xml', function($request) use($apidata, $app, $http_code) {				
+
+			$app->format('xml', function($request) use($apidata, $app, $http_code) {
 				$xml = Array2XML::createXML('response', $apidata);
 				return $app->response($http_code, $xml->saveXML())->header('Content-Type', 'application/xml');
 			});
