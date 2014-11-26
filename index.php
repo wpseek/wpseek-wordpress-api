@@ -45,6 +45,7 @@ $app->path('wordpress', function($request) use($app) {
 				$http_code = ($i->is_error ? 404 : 200);
 
 				$app->format('json', function() use($apidata, $app, $http_code) {
+					$apidata['params'] = $apidata['params']['param'];
 					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
 				});
 
