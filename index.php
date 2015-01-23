@@ -164,6 +164,68 @@ $app->path('wordpress', function($request) use($app) {
 	});
 });
 
+
+$app->path('app', function($request) use($app) {
+
+	$app->path('function', function($request) use($app) {
+		$app->path('info', function($request) use($app) {
+			$app->param('slug', function($request, $func) use($app) {
+				$i = new apiHelper();
+				$apidata = $i->getFunction($func, true);
+
+				$http_code = ($i->is_error ? 404 : 200);
+
+				$app->format('json', function() use($apidata, $app, $http_code) {
+					$apidata['params'] = $apidata['params']['param'];
+					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
+				});
+			});
+		});
+
+		$app->path('related', function($request) use($app) {
+			$app->param('slug', function($request, $func) use($app) {
+				$format = $request->format();
+				$i = new apiHelper();
+				$apidata = $i->getRelatedFunctions($func, $request, $format);
+
+				$http_code = ($i->is_error ? 404 : 200);
+
+				$app->format('json', function() use($apidata, $app, $http_code) {
+					return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
+				});
+			});
+		});
+	});
+
+	$app->path('ios', function($request) use($app) {
+		$app->get(function($request) use($app) {
+			$format = $request->format();
+			$i = new apiHelper();
+			$apidata = $i->getIosData($format);
+
+			$http_code = ($i->is_error ? 404 : 200);
+
+			$app->format('json', function() use($apidata, $app, $http_code) {
+				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
+			});
+		});
+	});
+
+	$app->path('functions', function($request) use($app) {
+		$app->param('slug', function($request, $letter) use($app) {
+			$i = new apiHelper();
+			$apidata = $i->getFunctionsByLetter($letter, $request);
+
+			$http_code = ($i->is_error ? 404 : 200);
+
+			$app->format('json', function() use($apidata, $app, $http_code) {
+				return $app->response($http_code, $apidata)->header('Content-Type', 'application/json')->header('Access-Control-Allow-Origin', '*');
+			});
+		});
+	});
+});
+
+
 $app->on('Exception', function(Request $request, Response $response, \Exception $e) use($app) {
 	if( $request->format() === 'json' ) {
 		$response->content(array(
